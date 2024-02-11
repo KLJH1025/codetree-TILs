@@ -27,7 +27,7 @@ public class Main {
                     maxRow = Math.max(maxRow, p.y);
                     minCol = Math.min(minCol, p.x);
                 }
-                else {
+                else if(p.color == 0){
                     containsRed += 1;
                 }
             }
