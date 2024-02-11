@@ -23,7 +23,7 @@ public class Main {
             this.points = points;
 
             for(Point p : points) {
-                if(p.color != 0) {
+                if(p.color != 0 || p.color != -2) {
                     maxRow = Math.max(maxRow, p.y);
                     minCol = Math.min(minCol, p.x);
                 }
