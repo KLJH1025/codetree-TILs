@@ -42,7 +42,7 @@ public class Main {
                     }
                     return g.maxRow - this.maxRow;
                 }
-                return g.containsRed - this.containsRed;
+                return this.containsRed - g.containsRed;
             }
             return g.points.size() - this.points.size();
         }
@@ -70,13 +70,19 @@ public class Main {
             }
         }
 
-        // -1: 검은색 돌, 0: 빨간색 폭탄, 1<=x<=m: 빨간색과는 서로 다른 색의 폭탄
+        // -1: 검은색 돌, 0: 빨간색 폭탄, 1<=x<=m: 빨간색과는 서로 다른 색의 폭탄, -2: 빈곳
         int score = 0;
         while(true) {
             // 폭탄 묶음: 같은색으로만 2개이상 (빨강X) or 같은색+빨간색(2개이상) // 빨간색만으로는 불가
             pq = new PriorityQueue<>();
 
             visited = new boolean[n][n];
+            for(int r=0; r<n; r++) {
+                for(int c=0; c<n; c++) {
+                    if(map[r][c] == -2) visited[r][c] = true;
+                }
+            }
+
             for(int r=0; r<n; r++) {
                 for(int c=0; c<n; c++) {
                     findGroup(r, c, map[r][c]);
@@ -88,18 +94,20 @@ public class Main {
             // 폭탄 고르는 우선순위
             // 같은 크기 중에서 빨간색 폭탄이 적은 것 > 빨간색이 아니면서 행이 젤 큰 칸 > 열이 가장 작은 칸
             Group group = pq.poll();
+
             //
             for(Point p : group.points) {
-                // System.out.println("p.y: " + p.y + ", p.x: " + p.x);
+                //System.out.println("p.y: " + p.y + ", p.x: " + p.x);
             }
-            
+
             //
             for(Point p : group.points) {
                 map[p.y][p.x] = -2;
             }
+
             score += (group.points.size() * group.points.size());
-            // System.out.println("score: " + score);
-            // System.out.println("===========");
+            //System.out.println("score: " + score);
+            //System.out.println("===========");
 
             // printMap();
             // 선택된 폭탄 제거 후에 중력이 작용하여 밑으로 내려감. 돌들은 위치 고정
@@ -113,12 +121,8 @@ public class Main {
             // printMap();
             //System.out.println("========================");
         }
-        if(score == 1807) {
-            System.out.println(score-1);
-        }
-        else {
-            System.out.println(score);
-        }
+
+        System.out.println(score);
     }
 
     public static void findGroup(int y, int x, int standardColor) {
@@ -187,7 +191,7 @@ public class Main {
         // 1 2 3 4    3 3 3 3   1 3 -> 3 1
         // 1 2 3 4    2 2 2 2
         // 1 2 3 4    1 1 1 1   3 3 -> 0 3
-        
+
         for(int i=0; i<n; i++) {
             for(int j=0; j<n; j++) {
                 map[n-1-j][i] = cloneMap[i][j];
