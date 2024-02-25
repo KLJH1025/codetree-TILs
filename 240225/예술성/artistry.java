@@ -49,15 +49,16 @@ public class Main {
             }
         }
         
-
-        for(int i=0; i<4; i++) {
+        int count = 0;
+        while(true) {
             makeGroups();
-            // 예술점수 계산
             calculateScore();
+            count++;
+            if(count >= 4) break;
+
             rotateCross();
             rotateSquare();
         }
-
         System.out.println(answer);
     }
 
@@ -73,7 +74,7 @@ public class Main {
             for(int j=1; j<=N; j++) {
                 if(!visited[i][j]) {
                     ArrayList<Point> arr = new ArrayList<>();
-                    
+
                     Queue<Point> queue = new ArrayDeque<>();
                     visited[i][j] = true;
                     groupNumber[i][j] = groupNum;
@@ -117,7 +118,7 @@ public class Main {
                     betweenLineCount[groupNumber[j-1][i]][groupNumber[j][i]] += 1;
                 }
             }
-        }     
+        }
     }
 
     // 회색 십자가 돌리기
@@ -136,14 +137,7 @@ public class Main {
             map[i][mid] = horizontal.pop();
             map[mid][i] = vertical.poll();
         }
-
-        // for(int i=1; i<=N; i++) {
-        //     for(int j=1; j<=N; j++) {
-        //         System.out.print(map[i][j] + " ");
-        //     }
-        //     System.out.println();
-        // }
-        // System.out.println();
+        
     }
 
     // 노란색 네모 4개 돌리기
@@ -157,14 +151,6 @@ public class Main {
     public static void rotateEachSquare(int startY, int startX, int len) {
         int[][] copy = new int[len][len];
 
-        // (1, 1) -> (1, 5)
-        // (2, 2) -> (2, 4)
-
-        // 1 4 1, 0 -> 0 2
-        // 2 4 -> 1, 4
-
-        // start 4, 1 -> (0, 0) -> (0, )
-        // 4, 1 -> 4, 2
         for(int row=startY; row<startY+len; row++) {
             for(int col=startX; col<startX+len; col++) {
                 int r = row - startY;
@@ -193,14 +179,13 @@ public class Main {
                     Group g2 = hashMap.get(s2);
 
                     score += (betweenLineCount[s1][s2] * g2.value * g1.value * (g1.points.size() + g2.points.size()));
-                    
+
                 }
             }
         }
-        
         answer += score;
     }
-    
+
     // 좌표 유효성 검사
     public static boolean check(int y, int x) {
         if(y < 1 || x < 1 || x > N || y > N) {
