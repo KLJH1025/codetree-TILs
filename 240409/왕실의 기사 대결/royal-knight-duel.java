@@ -71,6 +71,8 @@ public class Main {
 			Stack<Integer> stack = new Stack<>();
 			queue.add(i);
 			stack.add(i);
+			boolean[] check = new boolean[N+1];
+			check[i] = true;
 			
 			boolean flag = true;
 			
@@ -93,8 +95,10 @@ public class Main {
 						//
 						if(position[y][x] != p.index && position[y][x] >= 1) {
 							int index = position[y][x];
+							if(check[index]) continue;
 							queue.add(index);
 							stack.add(index);
+							check[index] = true;
 						}
 						// 
 					}
